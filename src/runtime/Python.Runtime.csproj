@@ -164,6 +164,32 @@
     <TargetAssembly>$(TargetPath)</TargetAssembly>
     <TargetAssemblyPdb>$(TargetDir)$(TargetName).pdb</TargetAssemblyPdb>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseMono|AnyCPU' ">
+    <IntermediateOutputPath></IntermediateOutputPath>
+    <DocumentationFile></DocumentationFile>
+    <DocumentationFile>bin\Python.Runtime.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseMonoPY3|AnyCPU' ">
+    <NoWarn></NoWarn>
+    <AllowUnsafeBlocks></AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <NoWarn>1591</NoWarn>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>anycpu</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugMono|AnyCPU' ">
+    <DefineConstants>PYTHON3;PYTHON36;UCS4;TRACE;DEBUG</DefineConstants>
+    <CustomCommands>
+      <CustomCommands>
+        <Command>
+          <type>Custom</type>
+        </Command>
+      </CustomCommands>
+    </CustomCommands>
+  </PropertyGroup>
   <Target Name="AfterBuild">
     <Copy SourceFiles="$(TargetAssembly)" DestinationFolder="$(PythonBuildDir)" />
     <!--Copy SourceFiles="$(TargetAssemblyPdb)" Condition="Exists('$(TargetAssemblyPdb)')" DestinationFolder="$(PythonBuildDir)" /-->

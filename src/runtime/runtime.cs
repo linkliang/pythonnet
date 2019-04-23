@@ -269,11 +269,17 @@ namespace Python.Runtime
         /// </summary>
         internal static readonly Encoding PyEncoding = _UCS == 2 ? Encoding.Unicode : Encoding.UTF32;
 
+        internal static void Initialize(string path, bool initSigs = false){
+            NativeMethods.LoadLibrary(path);
+            Initialize(initSigs);
+        }
+
         /// <summary>
         /// Initialize the runtime...
         /// </summary>
         internal static void Initialize(bool initSigs = false)
         {
+            Console.WriteLine("dyld path in PythonNet: " + Environment.GetEnvironmentVariable("DYLD_FALLBACK_LIBRARY_PATH"));
             if (Py_IsInitialized() == 0)
             {
                 Py_InitializeEx(initSigs ? 1 : 0);
@@ -577,6 +583,7 @@ namespace Python.Runtime
 
         internal static Type[] PythonArgsToTypeArray(IntPtr arg)
         {
+
             return PythonArgsToTypeArray(arg, false);
         }
 

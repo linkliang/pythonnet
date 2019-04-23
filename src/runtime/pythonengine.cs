@@ -145,6 +145,12 @@ namespace Python.Runtime
             Initialize(Enumerable.Empty<string>(), setSysArgv: setSysArgv, initSigs: initSigs);
         }
 
+        private static string userPythonPath = "";
+        public static void Initialize(string path){
+            userPythonPath = path;
+            Initialize(setSysArgv: true);
+        }
+
         /// <summary>
         /// Initialize Method
         /// </summary>
@@ -165,7 +171,12 @@ namespace Python.Runtime
                 // during an initial "import clr", and the world ends shortly thereafter.
                 // This is probably masking some bad mojo happening somewhere in Runtime.Initialize().
                 delegateManager = new DelegateManager();
-                Runtime.Initialize(initSigs);
+                if (userPythonPath.Length>0){
+                    Runtime.Initialize(userPythonPath,initSigs);
+                }
+                else{
+                    Runtime.Initialize(initSigs);
+                }
                 initialized = true;
                 Exceptions.Clear();
 
