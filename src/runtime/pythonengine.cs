@@ -140,7 +140,20 @@ namespace Python.Runtime
             Initialize(setSysArgv: true);
         }
 
-        public static void Initialize(bool setSysArgv = true, bool initSigs = false)
+        [DllImport("/usr/lib/libSystem.dylib", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern IntPtr dlopen(String fileName, int flags);
+
+        [DllImport("/usr/lib/libSystem.dylib", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int dlclose(IntPtr handle);
+
+        public static void Initialize(string userPythonPath){
+            IntPtr handle = dlopen(userPythonPath,0x8);
+            Console.WriteLine("Library loaded: " + userPythonPath);
+            Initialize();
+            dlclose(handle);
+        }
+
+        public static void Initialize(bool setSysArgv = true, bool initSigs = false, string userPythonPath = "")
         {
             Initialize(Enumerable.Empty<string>(), setSysArgv: setSysArgv, initSigs: initSigs);
         }
@@ -155,7 +168,7 @@ namespace Python.Runtime
         /// interpreter lock (GIL) to call this method.
         /// initSigs can be set to 1 to do default python signal configuration. This will override the way signals are handled by the application.
         /// </remarks>
-        public static void Initialize(IEnumerable<string> args, bool setSysArgv = true, bool initSigs = false)
+        public static void Initialize(IEnumerable<string> args, bool setSysArgv = true, bool initSigs = false, string userPythonPath = "")
         {
             if (!initialized)
             {
