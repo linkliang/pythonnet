@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace Python.Runtime
 {
     [SuppressUnmanagedCodeSecurity]
-    internal static class NativeMethods
+    public static class NativeMethods
     {
 #if MONO_LINUX || MONO_OSX
 #if NETSTANDARD
@@ -272,8 +272,12 @@ namespace Python.Runtime
         /// <summary>
         /// Initialize the runtime...
         /// </summary>
-        internal static void Initialize(bool initSigs = false)
+        internal static void Initialize(bool initSigs = false, string userPythonPath = "")
         {
+            if (userPythonPath.Length > 0){
+                 NativeMethods.dlopen(userPythonPath,0x8);
+                 Console.WriteLine("loaded library: " + userPythonPath);
+            }
             if (Py_IsInitialized() == 0)
             {
                 Py_InitializeEx(initSigs ? 1 : 0);
